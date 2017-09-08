@@ -6,6 +6,7 @@
 package br.com.joaops.cliente.mapper.converter;
 
 import org.dozer.CustomConverter;
+import org.dozer.MappingException;
 
 /**
  *
@@ -26,8 +27,7 @@ public class UUIDConverter implements CustomConverter {
                 if (existingDestinationFieldValue == null) {
                     destination = java.util.UUID.fromString(source.toString());
                 } else {
-                    System.err.println("UUIDConverter cannot use existing destination field value");
-                    //throw new MappingException("UUIDConverter cannot use existing destination field value");
+                    throw new MappingException("UUIDConverter cannot use existing destination field value");
                 }
             }
         }

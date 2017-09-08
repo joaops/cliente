@@ -31,7 +31,7 @@ and open the template in the editor.
         </Root>
         <Logger name="br.com.joaops.cliente" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="RollingFile" level="info"/>
+            <AppenderRef ref="RollingFile" level="debug"/>
         </Logger>
     </Loggers>
     

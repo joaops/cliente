@@ -6,15 +6,18 @@
 package br.com.joaops.cliente.mapper.converter;
 
 import java.net.MalformedURLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.dozer.CustomConverter;
+import org.dozer.MappingException;
 
 /**
  *
  * @author João Paulo Siqueira <joaopaulo1094@gmail.com>
  */
 public class URLConverter implements CustomConverter {
+    
+    private static final Logger LOGGER = LogManager.getLogger(URLConverter.class);
     
     @Override
     public Object convert(Object existingDestinationFieldValue, Object sourceFieldValue, Class<?> destinationClass, Class<?> sourceClass) {
@@ -30,13 +33,11 @@ public class URLConverter implements CustomConverter {
                     try {
                         destination = new java.net.URL(source.toString());
                     } catch (MalformedURLException ex) {
-                        Logger.getLogger(URLConverter.class.getName()).log(Level.SEVERE, null, ex);
-                        System.err.println("URLConverter MalformedURLException: " + ex.getLocalizedMessage());
-                        //throw new MappingException("URLConverter MalformedURLException: " + ex.getLocalizedMessage());
+                        LOGGER.error(ex);
+                        throw new MappingException("URLConverter MalformedURLException: " + ex.getLocalizedMessage());
                     }
                 } else {
-                    System.err.println("URLConverter cannot use existing destination field value");
-                    //throw new MappingException("URLConverter cannot use existing destination field value");
+                    throw new MappingException("URLConverter cannot use existing destination field value");
                 }
             }
         }

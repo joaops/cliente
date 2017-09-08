@@ -6,6 +6,7 @@
 package br.com.joaops.cliente.mapper.converter;
 
 import org.dozer.CustomConverter;
+import org.dozer.MappingException;
 
 /**
  *
@@ -26,8 +27,7 @@ public class LocaleConverter implements CustomConverter {
                 if (existingDestinationFieldValue == null) {
                     destination = (java.util.Locale) source.clone();
                 } else {
-                    System.err.println("LocaleConverter cannot use existing destination field value");
-                    //throw new MappingException("LocaleConverter cannot use existing destination field value");
+                    throw new MappingException("LocaleConverter cannot use existing destination field value");
                 }
             }
         }

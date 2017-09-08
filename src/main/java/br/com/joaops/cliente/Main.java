@@ -19,7 +19,9 @@ import javafx.stage.Stage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.messaging.simp.stomp.StompSession;
 
 /**
  *
@@ -45,8 +47,24 @@ public class Main extends Application {
     
     @Override
     public void stop() throws Exception {
-        context.close();
         LOGGER.debug("Finalizando Aplicação.");
+        try {
+            StompSession stompSession = context.getBean(StompSession.class);
+            if (stompSession != null) {
+                if (stompSession.isConnected()) {
+                    LOGGER.debug("Desconectando da Sessão.");
+                    stompSession.disconnect();
+                } else {
+                    LOGGER.debug("A Sessão não está conectada.");
+                }
+            } else {
+                LOGGER.debug("O Bean da Sessão é Nulo.");
+            }
+        } catch (BeansException e) {
+            LOGGER.error("ERRO ao Desconectar Sessão.");
+        }
+        context.close();
+        System.exit(0); // Forçar Saída
     }
     
     @Override
