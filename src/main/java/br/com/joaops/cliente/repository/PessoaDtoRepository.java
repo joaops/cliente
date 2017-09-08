@@ -2,6 +2,7 @@ package br.com.joaops.cliente.repository;
 
 import br.com.joaops.cliente.dto.PessoaDto;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +21,15 @@ public class PessoaDtoRepository {
     
     @PostConstruct
     private void initial() {
-        MAP.put(1L, new PessoaDto(1L, "Fulano", new Date()));
-        MAP.put(2L, new PessoaDto(2L, "Ciclano", new Date()));
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, 1994); 
+        c.set(Calendar.MONTH, Calendar.AUGUST); 
+        c.set(Calendar.DAY_OF_MONTH, 10);
+        MAP.put(1L, new PessoaDto(1L, "João Paulo", c.getTime()));
+        c.set(Calendar.YEAR, 1995); 
+        c.set(Calendar.MONTH, Calendar.SEPTEMBER); 
+        c.set(Calendar.DAY_OF_MONTH, 11);
+        MAP.put(2L, new PessoaDto(2L, "Ciclano", c.getTime()));
         MAP.put(3L, new PessoaDto(3L, "Beltrano", new Date()));
     }
     

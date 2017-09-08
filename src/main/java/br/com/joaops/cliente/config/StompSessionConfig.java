@@ -1,5 +1,6 @@
 package br.com.joaops.cliente.config;
 
+import br.com.joaops.cliente.json.domain.PingJson;
 import br.com.joaops.cliente.json.request.PessoaRequest;
 import br.com.joaops.cliente.strategy.Command;
 import br.com.joaops.cliente.util.CONSTANTES;
@@ -63,12 +64,33 @@ public class StompSessionConfig {
             headers.add("Authorization", "Basic " + auth);
             ListenableFuture<StompSession> future = stompClient.connect(uri, headers, new MyHandler());
             StompSession stompSession = future.get();
+            subscribeTopicPing(stompSession);
             subscribeQueueFuncionarioRequest(stompSession);
             return stompSession;
         } catch (InterruptedException | ExecutionException e) {
             System.err.println("ERRO: " + e);
             return null;
         }
+    }
+    
+    private void subscribeTopicPing(StompSession stompSession) {
+        stompSession.subscribe(CONSTANTES.TOPICS.PING, new StompFrameHandler() {
+            @Override
+            public java.lang.reflect.Type getPayloadType(StompHeaders stompHeaders) {
+                return byte[].class;
+            }
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                try {
+                    String json = new String((byte[]) o, StandardCharsets.UTF_8);
+                    System.out.println("JSON: " + json);
+                    ObjectMapper mapper = new ObjectMapper();
+                    PingJson ping = mapper.readValue(json, PingJson.class);
+                } catch (Exception e) {
+                    System.err.println("ERRO " + e);
+                }
+            }
+        });
     }
     
     private void subscribeQueueFuncionarioRequest(StompSession stompSession) {

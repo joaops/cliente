@@ -13,16 +13,26 @@ import java.util.Date;
  */
 public class PessoaJson {
     
+    private Long id;
     private String nome;
     private Date nascimento;
     
     public PessoaJson() {
-        this("", new Date());
+        this(0L, "", new Date());
     }
     
-    public PessoaJson(String nome, Date nascimento) {
+    public PessoaJson(Long id, String nome, Date nascimento) {
+        this.id = id;
         this.nome = nome;
         this.nascimento = nascimento;
+    }
+    
+    public Long getId() {
+        return id;
+    }
+    
+    public void setId(Long id) {
+        this.id = id;
     }
     
     public String getNome() {
