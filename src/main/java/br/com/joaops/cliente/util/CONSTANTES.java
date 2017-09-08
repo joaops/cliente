@@ -25,6 +25,7 @@ public interface CONSTANTES {
     }
     
     interface QUEUES {
+        public static String PING = "/queue/ping";
         public static String PESSOA = "/queue/PessoaRequest";
     }
     

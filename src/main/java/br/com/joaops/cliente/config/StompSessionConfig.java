@@ -65,7 +65,8 @@ public class StompSessionConfig {
             ListenableFuture<StompSession> future = stompClient.connect(uri, headers, new MyHandler());
             StompSession stompSession = future.get();
             subscribeTopicPing(stompSession);
-            subscribeQueueFuncionarioRequest(stompSession);
+            subscribeQueuePing(stompSession);
+            subscribeQueuePessoaRequest(stompSession);
             return stompSession;
         } catch (InterruptedException | ExecutionException e) {
             System.err.println("ERRO: " + e);
@@ -93,7 +94,27 @@ public class StompSessionConfig {
         });
     }
     
-    private void subscribeQueueFuncionarioRequest(StompSession stompSession) {
+    private void subscribeQueuePing(StompSession stompSession) {
+        stompSession.subscribe("/user" + CONSTANTES.QUEUES.PING, new StompFrameHandler() {
+            @Override
+            public java.lang.reflect.Type getPayloadType(StompHeaders stompHeaders) {
+                return byte[].class;
+            }
+            @Override
+            public void handleFrame(StompHeaders stompHeaders, Object o) {
+                try {
+                    String json = new String((byte[]) o, StandardCharsets.UTF_8);
+                    System.out.println("JSON: " + json);
+                    ObjectMapper mapper = new ObjectMapper();
+                    PingJson request = mapper.readValue(json, PingJson.class);
+                } catch (Exception e) {
+                    System.err.println("ERRO " + e);
+                }
+            }
+        });
+    }
+    
+    private void subscribeQueuePessoaRequest(StompSession stompSession) {
         stompSession.subscribe("/user" + CONSTANTES.QUEUES.PESSOA, new StompFrameHandler() {
             @Override
             public java.lang.reflect.Type getPayloadType(StompHeaders stompHeaders) {
