@@ -1,8 +1,8 @@
 package br.com.joaops.cliente.config;
 
 import br.com.joaops.cliente.json.domain.PingJson;
-import br.com.joaops.cliente.json.request.PessoaRequest;
-import br.com.joaops.cliente.strategy.Command;
+import br.com.joaops.cliente.json.protocol.Message;
+import br.com.joaops.cliente.strategy.Strategy;
 import br.com.joaops.cliente.util.CONSTANTES;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import org.springframework.beans.factory.BeanFactory;
@@ -66,7 +65,7 @@ public class StompSessionConfig {
             StompSession stompSession = future.get();
             subscribeTopicPing(stompSession);
             subscribeQueuePing(stompSession);
-            subscribeQueuePessoaRequest(stompSession);
+            subscribeQueueMessage(stompSession);
             return stompSession;
         } catch (InterruptedException | ExecutionException e) {
             System.err.println("ERRO: " + e);
@@ -114,8 +113,8 @@ public class StompSessionConfig {
         });
     }
     
-    private void subscribeQueuePessoaRequest(StompSession stompSession) {
-        stompSession.subscribe("/user" + CONSTANTES.QUEUES.PESSOA, new StompFrameHandler() {
+    private void subscribeQueueMessage(StompSession stompSession) {
+        stompSession.subscribe("/user" + CONSTANTES.QUEUES.MESSAGE, new StompFrameHandler() {
             @Override
             public java.lang.reflect.Type getPayloadType(StompHeaders stompHeaders) {
                 return byte[].class;
@@ -126,10 +125,8 @@ public class StompSessionConfig {
                     String json = new String((byte[]) o, StandardCharsets.UTF_8);
                     System.out.println("JSON: " + json);
                     ObjectMapper mapper = new ObjectMapper();
-                    PessoaRequest request = mapper.readValue(json, PessoaRequest.class);
-                    System.out.println("ID: " + request.getId());
-                    System.out.println("Operação: " + request.getOperacao());
-                    executarComando(request.getOperacao(), request);
+                    Message request = mapper.readValue(json, Message.class);
+                    executarComando(request);
                 } catch (Exception e) {
                     System.err.println("ERRO " + e);
                 }
@@ -137,10 +134,10 @@ public class StompSessionConfig {
         });
     }
     
-    private void executarComando(String o, Object ... objects) {
-        Command cmd = beanFactory.getBean(o, Command.class);
-        if (cmd != null) {
-            cmd.executar(objects);
+    private void executarComando(Message message) {
+        Strategy s = beanFactory.getBean(message.getOperacao(), Strategy.class);
+        if (s != null) {
+            s.executar(message);
         }
     }
     

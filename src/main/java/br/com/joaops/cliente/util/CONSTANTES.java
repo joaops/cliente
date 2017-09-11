@@ -25,12 +25,12 @@ public interface CONSTANTES {
     
     interface QUEUES {
         public static String PING = "/queue/ping";
-        public static String PESSOA = "/queue/PessoaRequest";
+        public static String MESSAGE = "/queue/message";
     }
     
     interface ENDPOINTS {
         public static String START = "/start";
-        public static String PESSOA = "/PessoaResponse";
+        public static String MESSAGE = "/message";
     }
     
 }

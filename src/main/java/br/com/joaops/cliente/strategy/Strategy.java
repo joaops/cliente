@@ -5,12 +5,14 @@
  */
 package br.com.joaops.cliente.strategy;
 
+import br.com.joaops.cliente.json.protocol.Message;
+
 /**
  *
  * @author João Paulo
  */
-public interface Command {
+public interface Strategy {
     
-    public void executar(Object ... objects);
+    public void executar(Message message);
     
 }
