@@ -16,7 +16,6 @@ public interface CONSTANTES {
         public static String CONSULTAR_PESSOA_ID = "consultarPessoaId";
         public static String CONSULTAR_PESSOAS = "consultarPessoas";
         public static String SALVAR_PESSOA = "salvarPessoa";
-        public static String ALTERAR_PESSOA = "alterarPessoa";
         public static String DELETAR_PESSOA = "deletarPessoa";
     }
     

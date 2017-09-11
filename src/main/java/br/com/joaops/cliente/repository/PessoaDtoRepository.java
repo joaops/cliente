@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class PessoaDtoRepository {
     
+    private static Long ID_GENERATOR = 0L; 
     private static final Map<Long, PessoaDto> MAP = new HashMap<>();
     
     @PostConstruct
@@ -25,16 +26,25 @@ public class PessoaDtoRepository {
         c.set(Calendar.YEAR, 1994); 
         c.set(Calendar.MONTH, Calendar.AUGUST); 
         c.set(Calendar.DAY_OF_MONTH, 10);
-        MAP.put(1L, new PessoaDto(1L, "João Paulo", c.getTime()));
+        save(new PessoaDto(0L, "João Paulo", c.getTime()));
         c.set(Calendar.YEAR, 1995); 
         c.set(Calendar.MONTH, Calendar.SEPTEMBER); 
         c.set(Calendar.DAY_OF_MONTH, 11);
-        MAP.put(2L, new PessoaDto(2L, "Ciclano", c.getTime()));
-        MAP.put(3L, new PessoaDto(3L, "Beltrano", new Date()));
+        save(new PessoaDto(0L, "Ciclano", c.getTime()));
+        save(new PessoaDto(0L, "Beltrano", new Date()));
     }
     
-    public void save(PessoaDto pessoaDto) {
-        MAP.put(pessoaDto.getId(), pessoaDto);
+    public PessoaDto save(PessoaDto pessoaDto) {
+        PessoaDto dto;
+        if (pessoaDto.getId() > 0) {
+            MAP.put(pessoaDto.getId(), pessoaDto);
+            dto = MAP.get(pessoaDto.getId());
+        } else {
+            pessoaDto.setId(++ID_GENERATOR);
+            MAP.put(pessoaDto.getId(), pessoaDto);
+            dto = MAP.get(pessoaDto.getId());
+        }
+        return dto;
     }
     
     public void remove(Long id) {
