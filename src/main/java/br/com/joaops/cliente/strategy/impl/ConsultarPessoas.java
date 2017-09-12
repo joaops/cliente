@@ -9,9 +9,9 @@ import br.com.joaops.cliente.strategy.Strategy;
 import br.com.joaops.cliente.util.CONSTANTES;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Component;
@@ -22,9 +22,6 @@ import org.springframework.stereotype.Component;
  */
 @Component(CONSTANTES.COMANDOS.CONSULTAR_PESSOAS)
 public class ConsultarPessoas implements Strategy {
-    
-    @Autowired
-    private Mapper mapper;
     
     @Autowired
     private StompSession stompSession;
@@ -45,8 +42,7 @@ public class ConsultarPessoas implements Strategy {
             List<PessoaJson> pessoasJson = new ArrayList<>();
             PessoaJson pessoaJson;
             for (PessoaDto pessoaDto : pessoasDto) {
-                pessoaJson = new PessoaJson();
-                mapper.map(pessoaDto, pessoaJson);
+                pessoaJson = new PessoaJson(pessoaDto.getId(), pessoaDto.getNome(), new SimpleDateFormat("dd/MM/yyyy").format(pessoaDto.getNascimento()));
                 pessoasJson.add(pessoaJson);
             }
             // Adiciono os Objetos no Objeto de Resposta

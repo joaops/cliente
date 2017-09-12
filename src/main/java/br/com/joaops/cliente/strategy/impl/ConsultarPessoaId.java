@@ -9,7 +9,7 @@ import br.com.joaops.cliente.strategy.Strategy;
 import br.com.joaops.cliente.util.CONSTANTES;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
-import org.dozer.Mapper;
+import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,6 @@ import org.springframework.stereotype.Component;
  */
 @Component(CONSTANTES.COMANDOS.CONSULTAR_PESSOA_ID)
 public class ConsultarPessoaId implements Strategy {
-    
-    @Autowired
-    private Mapper mapper;
     
     @Autowired
     private StompSession stompSession;
@@ -38,8 +35,7 @@ public class ConsultarPessoaId implements Strategy {
             response.setId(message.getId());
             Long id = Long.parseLong(String.valueOf(message.getParam("id")));
             PessoaDto pessoaDto = pessoaDtoRepository.findOne(id);
-            PessoaJson pessoaJson = new PessoaJson();
-            mapper.map(pessoaDto, pessoaJson);
+            PessoaJson pessoaJson = new PessoaJson(pessoaDto.getId(), pessoaDto.getNome(), new SimpleDateFormat("dd/MM/yyyy").format(pessoaDto.getNascimento()));
             response.setParam("pessoa", pessoaJson);
             String json = objectMapper.writeValueAsString(response);
             stompSession.send("/app" + CONSTANTES.ENDPOINTS.MESSAGE, json.getBytes(StandardCharsets.UTF_8));

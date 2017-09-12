@@ -5,9 +5,6 @@
  */
 package br.com.joaops.cliente.json.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import java.util.Date;
-
 /**
  *
  * @author João Paulo Siqueira <joaopaulo1094@gmail.com>
@@ -16,14 +13,13 @@ public class PessoaJson {
     
     private Long id;
     private String nome;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="GMT-3")
-    private Date nascimento;
+    private String nascimento;
     
     public PessoaJson() {
-        this(0L, "", new Date());
+        this(0L, "", "");
     }
     
-    public PessoaJson(Long id, String nome, Date nascimento) {
+    public PessoaJson(Long id, String nome, String nascimento) {
         this.id = id;
         this.nome = nome;
         this.nascimento = nascimento;
@@ -45,11 +41,11 @@ public class PessoaJson {
         this.nome = nome;
     }
     
-    public Date getNascimento() {
+    public String getNascimento() {
         return nascimento;
     }
     
-    public void setNascimento(Date nascimento) {
+    public void setNascimento(String nascimento) {
         this.nascimento = nascimento;
     }
     

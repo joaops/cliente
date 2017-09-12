@@ -1,6 +1,5 @@
 package br.com.joaops.cliente.strategy.impl;
 
-import br.com.joaops.cliente.Main;
 import br.com.joaops.cliente.controller.PessoaLayoutController;
 import br.com.joaops.cliente.json.protocol.Message;
 import br.com.joaops.cliente.json.protocol.Status;
@@ -9,7 +8,6 @@ import br.com.joaops.cliente.strategy.Strategy;
 import br.com.joaops.cliente.util.CONSTANTES;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -21,9 +19,6 @@ import org.springframework.stereotype.Component;
  */
 @Component(CONSTANTES.COMANDOS.DELETAR_PESSOA)
 public class DeletarPessoa implements Strategy {
-    
-    @Autowired
-    private Mapper mapper;
     
     @Autowired
     private BeanFactory beanFactory;

@@ -13,6 +13,7 @@ import br.com.joaops.cliente.util.CONSTANTES;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.BeanFactory;
@@ -27,9 +28,6 @@ import org.springframework.stereotype.Component;
  */
 @Component(CONSTANTES.COMANDOS.SALVAR_PESSOA)
 public class SalvarPessoa implements Strategy {
-    
-    @Autowired
-    private Mapper mapper;
     
     @Autowired
     private BeanFactory beanFactory;
@@ -47,11 +45,9 @@ public class SalvarPessoa implements Strategy {
             Message response = new Message();
             response.setId(message.getId());
             PessoaJson aux = objectMapper.convertValue(message.getParam("pessoa"), PessoaJson.class);
-            PessoaDto dto = new PessoaDto();
-            mapper.map(aux, dto);
+            PessoaDto dto = new PessoaDto(aux.getId(), aux.getNome(), new SimpleDateFormat("dd/MM/yyyy").parse(aux.getNascimento()));
             PessoaDto salvo = pessoaDtoRepository.save(dto);
-            PessoaJson pessoaJson = new PessoaJson();
-            mapper.map(salvo, pessoaJson);
+            PessoaJson pessoaJson = new PessoaJson(salvo.getId(), salvo.getNome(), new SimpleDateFormat("dd/MM/yyyy").format(salvo.getNascimento()));
             response.setParam("pessoa", pessoaJson);
             String json = objectMapper.writeValueAsString(response);
             stompSession.send("/app" + CONSTANTES.ENDPOINTS.MESSAGE, json.getBytes(StandardCharsets.UTF_8));
