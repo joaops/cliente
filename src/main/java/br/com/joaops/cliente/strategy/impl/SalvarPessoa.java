@@ -1,5 +1,7 @@
 package br.com.joaops.cliente.strategy.impl;
 
+import br.com.joaops.cliente.Main;
+import br.com.joaops.cliente.controller.PessoaLayoutController;
 import br.com.joaops.cliente.dto.PessoaDto;
 import br.com.joaops.cliente.json.domain.PessoaJson;
 import br.com.joaops.cliente.json.protocol.Message;
@@ -13,6 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 
 import org.dozer.Mapper;
+import org.springframework.beans.factory.BeanFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -27,6 +30,9 @@ public class SalvarPessoa implements Strategy {
     
     @Autowired
     private Mapper mapper;
+    
+    @Autowired
+    private BeanFactory beanFactory;
     
     @Autowired
     private StompSession stompSession;
@@ -49,6 +55,9 @@ public class SalvarPessoa implements Strategy {
             response.setParam("pessoa", pessoaJson);
             String json = objectMapper.writeValueAsString(response);
             stompSession.send("/app" + CONSTANTES.ENDPOINTS.MESSAGE, json.getBytes(StandardCharsets.UTF_8));
+            // Atualizar a Tela
+            PessoaLayoutController controller = beanFactory.getBean(PessoaLayoutController.class);
+            controller.carregarTableViewPessoa();
         } catch (Exception e) {
             System.err.println("ERRO " + e);
             sendMessageError(message.getId(), e.getMessage());

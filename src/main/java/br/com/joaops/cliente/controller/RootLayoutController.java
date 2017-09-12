@@ -9,8 +9,10 @@ import br.com.joaops.cliente.Main;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,6 +43,25 @@ public class RootLayoutController implements Initializable {
     
     public void setMain(Main main) {
         this.main = main;
+    }
+    
+    @FXML
+    private void sair() {
+        System.exit(0);
+    }
+    
+    @FXML
+    private void mostrarModuloPessoa() {
+        main.showPessoaLayout();
+    }
+    
+    @FXML
+    private void sobre() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sobre");
+        alert.setHeaderText("Aplicação Cliente");
+        alert.setContentText("Versão 1.0-SNAPSHOT");
+        alert.showAndWait();
     }
     
 }

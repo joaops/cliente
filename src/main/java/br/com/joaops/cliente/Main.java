@@ -3,7 +3,7 @@ package br.com.joaops.cliente;
 import br.com.joaops.cliente.config.ApplicationConfig;
 import br.com.joaops.cliente.config.MapperConfig;
 import br.com.joaops.cliente.config.StompSessionConfig;
-import br.com.joaops.cliente.controller.HomeLayoutController;
+import br.com.joaops.cliente.controller.PessoaLayoutController;
 import br.com.joaops.cliente.controller.RootLayoutController;
 
 import java.io.IOException;
@@ -73,7 +73,7 @@ public class Main extends Application {
         this.primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/favicon.png")));
         this.primaryStage.setTitle("Cliente");
         showRootLayout();
-        showHomeLayout();
+        showPessoaLayout();
     }
     
     /**
@@ -96,16 +96,16 @@ public class Main extends Application {
         }
     }
     
-    public void showHomeLayout() {
+    public void showPessoaLayout() {
         try {
             // Carrega o person overview.
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/HomeLayout.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PessoaLayout.fxml"));
             loader.setControllerFactory(context::getBean);
             AnchorPane pane = (AnchorPane) loader.load();
             // Define o pane dentro do root layout.
             rootLayout.setCenter(pane);
             // Fornecer uma instância de acesso ao Main.
-            HomeLayoutController controller = loader.getController();
+            PessoaLayoutController controller = loader.getController();
             controller.setMain(this);
         } catch (IOException e) {
             System.err.println("ERRO: " + e.toString());

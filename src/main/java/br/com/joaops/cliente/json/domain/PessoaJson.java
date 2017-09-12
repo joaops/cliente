@@ -5,6 +5,7 @@
  */
 package br.com.joaops.cliente.json.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 /**
@@ -15,6 +16,7 @@ public class PessoaJson {
     
     private Long id;
     private String nome;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone="GMT-3")
     private Date nascimento;
     
     public PessoaJson() {
